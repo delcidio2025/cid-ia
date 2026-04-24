@@ -1,0 +1,15 @@
+{
+  "name": "cid-ia",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "whatsapp-web.js": "^1.23.0",
+    "qrcode-terminal": "^0.12.0",
+    "axios": "^1.6.2",
+    "dotenv": "^16.3.1"
+  }
+}
