@@ -813,4 +813,1276 @@
       <div class="home-card" onclick="switchTab('imagem')">
         <div class="home-card-icon">🖼️</div>
         <div class="home-card-count">10</div>
-        <div class="home-card-label">Ima
+        <div class="home-card-label">Imagem</div>
+        <div class="home-card-tools">Gerar com IA<br>Analisar · Comparar<br>Resize · Converter<br>Comprimir · Marca d'água</div>
+      </div>
+      <div class="home-card" onclick="switchTab('video')">
+        <div class="home-card-icon">🎬</div>
+        <div class="home-card-count">8</div>
+        <div class="home-card-label">Vídeo</div>
+        <div class="home-card-tools">Preview · Corte<br>8 filtros CSS<br>Velocidade · Volume<br>Overlay · Exportar</div>
+      </div>
+      <div class="home-card" onclick="switchTab('audio')">
+        <div class="home-card-icon">🎵</div>
+        <div class="home-card-count">5</div>
+        <div class="home-card-label">Música & Áudio</div>
+        <div class="home-card-tools">Player + Visualizador<br>Cortar trecho<br>Controle volume<br>Analisar estilo</div>
+      </div>
+      <div class="home-card" onclick="switchTab('util')">
+        <div class="home-card-icon">🔧</div>
+        <div class="home-card-count">14</div>
+        <div class="home-card-label">Utilitários</div>
+        <div class="home-card-tools">QR Code · Senhas<br>Base64 · JSON<br>Conversor · Diff<br>CPF/CNPJ · RGB/HEX</div>
+      </div>
+      <div class="home-card" style="border-color:rgba(0,245,255,0.3);background:linear-gradient(135deg,#0e0e0e,rgba(0,245,255,0.05))">
+        <div class="home-card-icon">🏆</div>
+        <div class="home-card-count" style="font-size:1.3rem">50+</div>
+        <div class="home-card-label">Total</div>
+        <div class="home-card-tools">Ferramentas ativas<br>Multilíngue · IA<br>100% no browser<br>Atualização contínua</div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section-title">⚡ STATUS DO SISTEMA</div>
+    <div class="tools-grid">
+      <div class="tool-card">
+        <h3>🤖 Modelo de IA</h3>
+        <p>Motor principal de linguagem</p>
+        <div class="output-box" style="color:var(--cyan)">Llama 3 70B (Groq)\nLatência: ~1-3s\nIdiomas: Todos\nContexto: 8.192 tokens</div>
+      </div>
+      <div class="tool-card">
+        <h3>🌐 Imagens</h3>
+        <p>Gerador de imagens</p>
+        <div class="output-box" style="color:var(--cyan)">Pollinations AI\nResoluções: 512→2048px\nEstilos: ilimitados\nGratuito · Sem limite</div>
+      </div>
+      <div class="tool-card">
+        <h3>📡 Backend</h3>
+        <p>Servidor Node.js</p>
+        <div class="output-box" id="status-box" style="color:var(--green)">Verificando status...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════ CHAT IA ════ -->
+  <div id="tab-chat" class="tab-panel">
+    <div class="section-title">💬 CHAT IA — ESPECIALISTAS</div>
+    <div class="chat-layout">
+      <div class="mode-list">
+        <button class="mode-btn active" onclick="setMode('geral',this)">🌐 Geral</button>
+        <button class="mode-btn" onclick="setMode('dev',this)">💻 Dev</button>
+        <button class="mode-btn" onclick="setMode('dados',this)">📊 Dados</button>
+        <button class="mode-btn" onclick="setMode('juridico',this)">⚖️ Jurídico</button>
+        <button class="mode-btn" onclick="setMode('financeiro',this)">💰 Financeiro</button>
+        <button class="mode-btn" onclick="setMode('professor',this)">🎓 Professor</button>
+        <button class="mode-btn" onclick="setMode('tradutor',this)">🌍 Tradutor</button>
+        <button class="mode-btn" onclick="setMode('copywriter',this)">✍️ Copywriter</button>
+        <button class="mode-btn" onclick="setMode('design',this)">🎨 Design</button>
+        <button class="mode-btn" onclick="setMode('saude',this)">❤️ Saúde</button>
+        <div style="margin-top:auto;padding-top:8px">
+          <button class="btn btn-full" onclick="clearChat()" style="font-size:0.65rem">🗑 Limpar</button>
+        </div>
+      </div>
+
+      <div class="chat-box">
+        <div class="chat-messages" id="chat-messages">
+          <div class="msg msg-ai">
+            <div class="label">// CID · MODO GERAL</div>
+            Olá! Eu sou o CID. Posso responder em qualquer idioma. Como posso ajudar hoje?
+          </div>
+        </div>
+        <div class="chat-input-row">
+          <textarea class="chat-input" id="chat-input" placeholder="Digite sua mensagem... (Enter para enviar)" rows="1" onkeydown="handleKey(event)"></textarea>
+          <button class="btn-send" id="btn-send" onclick="sendChat()">ENVIAR</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════ PDF ════ -->
+  <div id="tab-pdf" class="tab-panel">
+    <div class="section-title">📄 PDF — 7 FERRAMENTAS</div>
+    <div class="tools-grid">
+
+      <div class="tool-card">
+        <h3>🔗 Juntar PDFs</h3>
+        <p>Selecione múltiplos arquivos PDF para unir em um só.</p>
+        <input type="file" id="pdf-merge-files" accept=".pdf" multiple>
+        <button class="btn btn-full" onclick="mergePDFs()">Juntar PDFs</button>
+        <div class="output-box" id="pdf-merge-out">Aguardando arquivos...</div>
+      </div>
+
+      <div class="tool-card">
+        <h3>✂️ Dividir PDF</h3>
+        <p>Divida um PDF por páginas específicas.</p>
+        <input type="file" id="pdf-split-file" accept=".pdf">
+        <input type="text" id="pdf-split-pages" placeholder="Ex: 1-3, 5, 7-9">
+        <button class="btn btn-full" onclick="splitPDF()">Dividir PDF</button>
+        <div class="output-box" id="pdf-split-out">Aguardando arquivo...</div>
+      </div>
+
+      <div class="tool-card">
+        <h3>💧 Marca d'água</h3>
+        <p>Adicione texto como marca d'água em todas as páginas.</p>
+        <input type="file" id="pdf-wm-file" accept=".pdf">
+        <input type="text" id="pdf-wm-text" placeholder="Texto da marca d'água">
+        <button class="btn btn-full" onclick="addWatermark()">Adicionar Marca</button>
+        <div class="output-box" id="pdf-wm-out">Aguardando...</div>
+      </div>
+
+      <div class="tool-card">
+        <h3>🔄 Rotacionar PDF</h3>
+        <p>Rotacione todas as páginas de um PDF.</p>
+        <input type="file" id="pdf-rot-file" accept=".pdf">
+        <select id="pdf-rot-angle">
+          <option value="90">90° horário</option>
+          <option value="180">180°</option>
+          <option value="270">270° (90° anti-horário)</option>
+        </select>
+        <button class="btn btn-full" onclick="rotatePDF()">Rotacionar</button>
+        <div class="output-box" id="pdf-rot-out">Aguardando...</div>
+      </div>
+
+      <div class="tool-card">
+        <h3>🖼️ PDF → Imagem</h3>
+        <p>Converte a primeira página de um PDF em imagem PNG.</p>
+        <input type="file" id="pdf-img-file" accept=".pdf">
+        <button class="btn btn-full" onclick="pdfToImage()">Converter</button>
+        <div class="output-box" id="pdf-img-out">Aguardando...</div>
+      </div>
+
+      <div class="tool-card">
+        <h3>📦 Comprimir PDF</h3>
+        <p>Reduz o tamanho do arquivo PDF (remove metadados extras).</p>
+        <input type="file" id="pdf-comp-file" accept=".pdf">
+        <button class="btn btn-full" onclick="compressPDF()">Comprimir</button>
+        <div class="output-box" id="pdf-comp-out">Aguardando...</div>
+      </div>
+
+      <div class="tool-card">
+        <h3>🤖 Analisar PDF com IA</h3>
+        <p>Faça perguntas sobre o conteúdo de um PDF.</p>
+        <input type="file" id="pdf-ai-file" accept=".pdf">
+        <textarea id="pdf-ai-q" placeholder="O que você quer saber sobre o PDF?"></textarea>
+        <button class="btn btn-full" onclick="analyzePDF()">Analisar com IA</button>
+        <div class="output-box" id="pdf-ai-out">Aguardando PDF...</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ════ EXCEL ════ -->
+  <div id="tab-excel" class="tab-panel">
+    <div class="section-title">📊 EXCEL & DADOS — 6 FERRAMENTAS</div>
+    <div class="tools-grid">
+
+      <div class="tool-card">
+        <h3>📋 Analisar Planilha com IA</h3>
+        <p>Faça perguntas sobre seus dados CSV/Excel.</p>
+        <input type="file" id="xl-file" accept=".csv,.xlsx,.xls">
+        <textarea id="xl-q" placeholder="Ex: Qual produto vendeu mais? Faça um resumo..."></textarea>
+        <button class="btn btn-full" onclick="analyzeExcel()">Analisar com IA</button>
+        <div class="output-box" id="xl-out">Aguardando arquivo...</div>
+      </div>
+
+      <div class="tool-card">
+        <h3>✨ Gerar Planilha do Zero</h3>
+        <p>Descreva e a IA cria uma planilha CSV completa.</p>
+        <textarea id="xl-gen-prompt" placeholder="Ex: Planilha de controle financeiro pessoal com categorias, data, valor, tipo (entrada/saída)..."></textarea>
+        <button class="btn btn-full" onclick="generateExcel()">Gerar Planilha</button>
+        <div class="output-box" id="xl-gen-out">Aguardando prompt...</div>
+      </div>
+
+      <div class="tool-card">
+        <h3>🔄 Converter CSV ↔ JSON</h3>
+        <p>Converta dados entre os formatos.</p>
+        <textarea id="csv-convert-in" placeholder="Cole aqui o CSV ou JSON..."></textarea>
+        <select id="csv-convert-dir">
+          <option value="csv-json">CSV → JSON</option>
+          <option value="json-csv">JSON → CSV</option>
+        </select>
+        <button class="btn btn-full" onclick="convertCSV()">Converter</button>
+        <div class="output-box" id="csv-convert-out">Aguardando dados...</div>
+      </div>
+
+      <div class="tool-card">
+        <h3>🔍 Filtrar e Ordenar Dados</h3>
+        <p>Filtre linhas de um CSV por valor em uma coluna.</p>
+        <textarea id="csv-filter-data" placeholder="Cole o CSV aqui..."></textarea>
+        <input type="text" id="csv-filter-col" placeholder="Nome da coluna">
+        <input type="text" id="csv-filter-val" placeholder="Valor para filtrar">
+        <select id="csv-sort-col-order">
+          <option value="asc">Ordenar A→Z</option>
+          <option value="desc">Ordenar Z→A</option>
+        </select>
+        <button class="btn btn-full" onclick="filterCSV()">Filtrar & Ordenar</button>
+        <div class="output-box" id="csv-filter-out">Aguardando...</div>
+      </div>
+
+      <div class="tool-card">
+        <h3>🔗 Cruzar Duas Tabelas</h3>
+        <p>Une dois CSVs por uma coluna em comum (JOIN).</p>
+        <textarea id="csv-join-a" placeholder="CSV Tabela A..."></textarea>
+        <textarea id="csv-join-b" placeholder="CSV Tabela B..."></textarea>
+        <input type="text" id="csv-join-col" placeholder="Coluna em comum (ex: id, cpf)">
+        <button class="btn btn-full" onclick="joinCSV()">Cruzar Tabelas</button>
+        <div class="output-box" id="csv-join-out">Aguardando...</div>
+      </div>
+
+      <div class="tool-card">
+        <h3>📉 Estatísticas Rápidas</h3>
+        <p>Calcule média, máx, mín, soma de uma coluna numérica.</p>
+        <textarea id="csv-stats-data" placeholder="Cole o CSV aqui..."></textarea>
+        <input type="text" id="csv-stats-col" placeholder="Nome da coluna numérica">
+        <button class="btn btn-full" onclick="calcStats()">Calcular</button>
+        <div class="output-box" id="csv-stats-out">Aguardando...</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ════ IMAGEM ════ -->
+  <div id="tab-imagem" class="tab-panel">
+    <div class="section-title">🖼️ IMAGEM — 10 FERRAMENTAS</div>
+    <div class="tools-grid">
+
+      <div class="tool-card">
+        <h3>✨ Gerar Imagem com IA</h3>
+        <p>Descreva e a IA gera uma imagem (Pollinations).</p>
+        <textarea id="img-gen-prompt" placeholder="Ex: futuristic robot in a neon cyberpunk city, ultra detailed, 4k..."></textarea>
+        <select id="img-gen-size">
+          <option value="1024x1024">1024×1024 (Quadrado)</option>
+          <option value="1280x720">1280×720 (Widescreen)</option>
+          <option value="720x1280">720×1280 (Vertical)</option>
+          <option value="512x512">512×512 (Rápido)</option>
+        </select>
+        <button class="btn btn-full" onclick="generateImage()">Gerar Imagem</button>
+        <div class="output-box" id="img-gen-out">Aguardando prompt...</div>
+        <img id="img-gen-preview" class="img-preview">
+      </div>
+
+      <div class="tool-card">
+        <h3>🔍 Analisar Imagem com IA</h3>
+        <p>Envie uma imagem e faça perguntas sobre ela.</p>
+        <input type="file" id="img-analyze-file" accept="image/*">
+        <textarea id="img-analyze-q" placeholder="O que você quer saber sobre a imagem?"></textarea>
+        <button class="btn btn-full" onclick="analyzeImage()">Analisar com IA</button>
+        <div class="output-box" id="img-analyze-out">Aguardando imagem...</div>
+      </div>
+
+      <div class="tool-card">
+        <h3>📐 Redimensionar Imagem</h3>
+        <p>Redimensione para largura e altura específicas.</p>
+        <input type="file" id="img-resize-file" accept="image/*">
+        <input type="number" id="img-resize-w" placeholder="Largura (px)">
+        <input type="number" id="img-resize-h" placeholder="Altura (px)">
+        <button class="btn btn-full" onclick="resizeImage()">Redimensionar</button>
+        <div class="output-box" id="img-resize-out">Aguardando...</div>
+        <img id="img-resize-preview" class="img-preview">
+      </div>
+
+      <div class="tool-card">
+        <h3>🔄 Converter Formato</h3>
+        <p>Converta imagens entre JPG, PNG e WEBP.</p>
+        <input type="file" id="img-conv-file" accept="image/*">
+        <select id="img-conv-format">
+          <option value="image/png">→ PNG</option>
+          <option value="image/jpeg">→ JPG</option>
+          <option value="image/webp">→ WEBP</option>
+        </select>
+        <button class="btn btn-full" onclick="convertImage()">Converter</button>
+        <div class="output-box" id="img-conv-out">Aguardando...</div>
+        <img id="img-conv-preview" class="img-preview">
+      </div>
+
+      <div class="tool-card">
+        <h3>🗜️ Comprimir Imagem</h3>
+        <p>Reduza o tamanho mantendo boa qualidade.</p>
+        <input type="file" id="img-comp-file" accept="image/*">
+        <input type="number" id="img-comp-quality" placeholder="Qualidade 1-100 (padrão: 75)" value="75">
+        <button class="btn btn-full" onclick="compressImage()">Comprimir</button>
+        <div class="output-box" id="img-comp-out">Aguardando...</div>
+        <img id="img-comp-preview" class="img-preview">
+      </div>
+
+      <div class="tool-card">
+        <h3>💧 Marca d'água em Imagem</h3>
+        <p>Adicione texto sobre uma imagem.</p>
+        <input type="file" id="img-wm-file" accept="image/*">
+        <input type="text" id="img-wm-text" placeholder="Texto da marca d'água">
+        <select id="img-wm-pos">
+          <option value="center">Centro</option>
+          <option value="bottom-right">Canto inferior direito</option>
+          <option value="top-left">Canto superior esquerdo</option>
+        </select>
+        <button class="btn btn-full" onclick="watermarkImage()">Adicionar Marca</button>
+        <div class="output-box" id="img-wm-out">Aguardando...</div>
+        <img id="img-wm-preview" class="img-preview">
+      </div>
+
+      <div class="tool-card">
+        <h3>📎 Juntar Imagens</h3>
+        <p>Junte duas imagens lado a lado.</p>
+        <input type="file" id="img-join-a" accept="image/*">
+        <input type="file" id="img-join-b" accept="image/*">
+        <select id="img-join-dir">
+          <option value="h">Lado a lado (horizontal)</option>
+          <option value="v">Uma sobre a outra (vertical)</option>
+        </select>
+        <button class="btn btn-full" onclick="joinImages()">Juntar</button>
+        <div class="output-box" id="img-join-out">Aguardando...</div>
+        <img id="img-join-preview" class="img-preview">
+      </div>
+
+      <div class="tool-card">
+        <h3>📄 Imagem → PDF</h3>
+        <p>Converte uma ou mais imagens em um PDF.</p>
+        <input type="file" id="img-topdf-file" accept="image/*" multiple>
+        <button class="btn btn-full" onclick="imageToPDF()">Converter para PDF</button>
+        <div class="output-box" id="img-topdf-out">Aguardando imagem(ns)...</div>
+      </div>
+
+      <div class="tool-card">
+        <h3>🔍 Comparar Imagens</h3>
+        <p>Compare duas imagens e receba análise da IA.</p>
+        <input type="file" id="img-cmp-a" accept="image/*">
+        <input type="file" id="img-cmp-b" accept="image/*">
+        <button class="btn btn-full" onclick="compareImages()">Comparar</button>
+        <div class="output-box" id="img-cmp-out">Aguardando imagens...</div>
+      </div>
+
+      <div class="tool-card">
+        <h3>🎨 Extrair Paleta de Cores</h3>
+        <p>Detecta as cores dominantes de uma imagem.</p>
+        <input type="file" id="img-pal-file" accept="image/*">
+        <button class="btn btn-full" onclick="extractPalette()">Extrair Paleta</button>
+        <div class="output-box" id="img-pal-out">Aguardando imagem...</div>
+        <div id="img-pal-swatches" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ════ VÍDEO ════ -->
+  <div id="tab-video" class="tab-panel">
+    <div class="section-title">🎬 VÍDEO — 8 FERRAMENTAS</div>
+    <div class="tools-grid">
+
+      <div class="tool-card" style="grid-column: 1/-1">
+        <h3>▶️ Player de Vídeo com Filtros e Controles</h3>
+        <p>Carregue um vídeo e use todos os controles abaixo.</p>
+        <input type="file" id="vid-file" accept="video/*" onchange="loadVideo()">
+        <div style="margin-top:12px;border:1px solid var(--border);border-radius:10px;overflow:hidden;background:#000">
+          <video id="video-player" style="width:100%;max-height:400px;display:none" controls></video>
+          <div id="vid-placeholder" style="height:200px;display:flex;align-items:center;justify-content:center;color:var(--text-dim);font-family:var(--font-mono);font-size:0.75rem">
+            [ Carregue um vídeo acima ]
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-top:14px">
+          <div>
+            <div style="font-family:var(--font-mono);font-size:0.65rem;color:var(--cyan);margin-bottom:6px">FILTRO CSS</div>
+            <select id="vid-filter" onchange="applyVideoFilter()">
+              <option value="">Normal</option>
+              <option value="grayscale(100%)">P&B</option>
+              <option value="sepia(100%)">Sépia</option>
+              <option value="contrast(1.5) saturate(1.5)">Cinema</option>
+              <option value="blur(3px)">Blur</option>
+              <option value="hue-rotate(120deg)">Hue Shift</option>
+              <option value="invert(100%)">Invertido</option>
+              <option value="brightness(1.3) contrast(0.9)">Claro</option>
+              <option value="brightness(0.7) contrast(1.3)">Sombrio</option>
+            </select>
+          </div>
+          <div>
+            <div style="font-family:var(--font-mono);font-size:0.65rem;color:var(--cyan);margin-bottom:6px">VELOCIDADE</div>
+            <input type="range" min="0.25" max="3" step="0.25" value="1" id="vid-speed" oninput="setVideoSpeed(this.value)" style="width:100%;accent-color:var(--cyan)">
+            <div style="font-family:var(--font-mono);font-size:0.65rem;color:var(--text-dim);text-align:center" id="vid-speed-label">1x</div>
+          </div>
+          <div>
+            <div style="font-family:var(--font-mono);font-size:0.65rem;color:var(--cyan);margin-bottom:6px">VOLUME</div>
+            <input type="range" min="0" max="2" step="0.05" value="1" id="vid-vol" oninput="setVideoVol(this.value)" style="width:100%;accent-color:var(--cyan)">
+            <div style="font-family:var(--font-mono);font-size:0.65rem;color:var(--text-dim);text-align:center" id="vid-vol-label">100%</div>
+          </div>
+          <div>
+            <div style="font-family:var(--font-mono);font-size:0.65rem;color:var(--cyan);margin-bottom:6px">OVERLAY TEXTO</div>
+            <input type="text" id="vid-overlay" placeholder="Texto sobre o vídeo" oninput="setOverlay(this.value)" style="min-height:unset;margin-bottom:0">
+          </div>
+        </div>
+        <div id="vid-overlay-display" style="display:none;position:relative;margin-top:-8px;pointer-events:none">
+          <div id="vid-overlay-text" style="position:absolute;bottom:20px;left:50%;transform:translateX(-50%);font-family:var(--font-display);font-size:1.1rem;color:white;text-shadow:0 2px 8px black,0 0 20px var(--cyan);white-space:nowrap;letter-spacing:2px"></div>
+        </div>
+        <div style="margin-top:12px;font-family:var(--font-mono);font-size:0.65rem;color:var(--text-dim)">
+          <span id="vid-info">Nenhum vídeo carregado</span>
+        </div>
+      </div>
+
+      <div class="tool-card">
+        <h3>✂️ Marcar Pontos de Corte</h3>
+        <p>Registre momentos para corte.</p>
+        <button class="btn btn-full" onclick="markCut()">Marcar Ponto Atual</button>
+        <div class="output-box" id="vid-cuts-out" style="max-height:120px">Nenhum ponto marcado.</div>
+        <button class="btn btn-full" style="margin-top:8px" onclick="clearCuts()">Limpar Marcações</button>
+      </div>
+
+      <div class="tool-card">
+        <h3>🎵 Trilha Sonora</h3>
+        <p>Adicione uma música de fundo ao vídeo.</p>
+        <input type="file" id="vid-audio-file" accept="audio/*">
+        <button class="btn btn-full" onclick="addAudioTrack()">Adicionar Trilha</button>
+        <div class="output-box" id="vid-audio-out">Aguardando arquivos...</div>
+      </div>
+
+      <div class="tool-card">
+        <h3>📝 Legendas Automáticas com IA</h3>
+        <p>A IA gera um roteiro/legenda para o tema do vídeo.</p>
+        <textarea id="vid-caption-topic" placeholder="Sobre o que é o vídeo? Ex: tutorial de culinária italiana..."></textarea>
+        <button class="btn btn-full" onclick="generateCaptions()">Gerar Legendas</button>
+        <div class="output-box" id="vid-caption-out">Aguardando...</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ════ ÁUDIO ════ -->
+  <div id="tab-audio" class="tab-panel">
+    <div class="section-title">🎵 MÚSICA & ÁUDIO — 5 FERRAMENTAS</div>
+    <div class="tools-grid">
+
+      <div class="tool-card" style="grid-column:1/-1">
+        <h3>🎧 Player com Visualizador de Barras</h3>
+        <p>Carregue um áudio e veja o visualizador em tempo real.</p>
+        <input type="file" id="aud-file" accept="audio/*" onchange="loadAudio()">
+        <div style="margin-top:12px;background:#000;border-radius:10px;border:1px solid var(--border);padding:12px">
+          <canvas id="audio-visualizer" width="600" height="80" style="width:100%;border-radius:6px"></canvas>
+          <div style="display:flex;gap:10px;margin-top:10px;align-items:center">
+            <button class="btn" onclick="toggleAudio()" id="aud-play-btn">▶ Play</button>
+            <input type="range" id="aud-seek" min="0" max="100" value="0" style="flex:1;accent-color:var(--cyan)" oninput="seekAudio(this.value)">
+            <span id="aud-time" style="font-family:var(--font-mono);font-size:0.65rem;color:var(--text-dim)">0:00</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="tool-card">
+          <h3>✂️ Cortar Trecho de Áudio</h3>
+        <p>Extraia um trecho de um arquivo de áudio.</p>
+        <input type="file" id="aud-cut-file" accept="audio/*">
+        <input type="number" id="aud-cut-start" placeholder="Início (segundos)">
+        <input type="number" id="aud-cut-end" placeholder="Fim (segundos)">
+        <button class="btn btn-full" onclick="cutAudio()">Cortar Trecho</button>
+        <div class="output-box" id="aud-cut-out">Aguardando...</div>
+      </div>
+
+      <div class="tool-card">
+        <h3>🎵 Analisar Estilo Musical com IA</h3>
+        <p>Descreva uma música e a IA identifica o estilo, BPM, influências.</p>
+        <textarea id="aud-analyze-q" placeholder="Descreva a música ou cole a letra... Ex: música com batida eletrônica, voz feminina suave, melodia melancólica..."></textarea>
+        <button class="btn btn-full" onclick="analyzeMusicStyle()">Analisar Estilo</button>
+        <div class="output-box" id="aud-analyze-out">Aguardando...</div>
+      </div>
+
+      <div class="tool-card">
+        <h3>🔊 Controle de Volume em Tempo Real</h3>
+        <p>Ajuste o volume do áudio carregado no player.</p>
+        <input type="range" min="0" max="2" step="0.05" value="1" id="aud-volume" oninput="setAudioVolume(this.value)" style="width:100%;accent-color:var(--cyan)">
+        <div style="font-family:var(--font-mono);font-size:0.75rem;color:var(--cyan);text-align:center;margin-top:6px" id="aud-vol-label">Volume: 100%</div>
+        <div class="output-box" style="margin-top:10px;color:var(--text-dim)">Use o slider acima para ajustar o volume do player de áudio.</div>
+      </div>
+
+      <div class="tool-card">
+        <h3>📥 Baixar Áudio</h3>
+        <p>Baixe o arquivo de áudio carregado no player.</p>
+        <button class="btn btn-full" onclick="downloadAudio()">⬇ Baixar Áudio</button>
+        <div class="output-box" id="aud-dl-out" style="color:var(--text-dim)">Carregue um áudio no player primeiro.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ════ UTILITÁRIOS ════ -->
+  <div id="tab-util" class="tab-panel">
+    <div class="section-title">🔧 UTILITÁRIOS — 14 FERRAMENTAS</div>
+    <div class="util-cols">
+
+      <div class="tool-card">
+        <h3>📊 Contador de Palavras</h3>
+        <p>Conta palavras, caracteres e linhas do texto.</p>
+        <textarea id="wc-input" placeholder="Cole seu texto aqui..." oninput="countWords()"></textarea>
+        <div class="output-box" id="wc-out">Aguardando texto...</div>
+      </div>
+
+      <div class="tool-card">
+        <h3>🔑 Gerador de Senhas Seguras</h3>
+        <p>Gere senhas fortes e aleatórias.</p>
+        <input type="number" id="pw-len" value="16" placeholder="Comprimento">
+        <div style="display:flex;gap:8px;margin-bottom:10px">
+          <label style="font-size:0.75rem;cursor:none"><input type="checkbox" id="pw-upper" checked> Maiúsculas</label>
+          <label style="font-size:0.75rem;cursor:none"><input type="checkbox" id="pw-num" checked> Números</label>
+          <label style="font-size:0.75rem;cursor:none"><input type="checkbox" id="pw-sym" checked> Símbolos</label>
+        </div>
+        <button class="btn btn-full" onclick="generatePassword()">Gerar Senha</button>
+        <div class="output-box" id="pw-out">Clique para gerar...</div>
+      </div>
+
+      <div class="tool-card">
+        <h3>🔁 Base64 Encode/Decode</h3>
+        <p>Codifique ou decodifique texto em Base64.</p>
+        <textarea id="b64-input" placeholder="Texto ou Base64..."></textarea>
+        <div style="display:flex;gap:8px">
+          <button class="btn" style="flex:1" onclick="b64Encode()">Encode</button>
+          <button class="btn" style="flex:1" onclick="b64Decode()">Decode</button>
+        </div>
+        <div class="output-box" id="b64-out">Aguardando...</div>
+      </div>
+
+      <div class="tool-card">
+        <h3>🗂 Formatador de JSON</h3>
+        <p>Formate e valide JSON com identação.</p>
+        <textarea id="json-input" placeholder='{"chave": "valor"}'></textarea>
+        <button class="btn btn-full" onclick="formatJSON()">Formatar JSON</button>
+        <div class="output-box" id="json-out">Aguardando...</div>
+      </div>
+
+      <div class="tool-card">
+        <h3>📋 Comparador de Textos (Diff)</h3>
+        <p>Encontre diferenças entre dois textos.</p>
+        <textarea id="diff-a" placeholder="Texto A (original)..."></textarea>
+        <textarea id="diff-b" placeholder="Texto B (novo)..."></textarea>
+        <button class="btn btn-full" onclick="diffTexts()">Comparar</button>
+        <div class="output-box" id="diff-out">Aguardando textos...</div>
+      </div>
+
+      <div class="tool-card">
+        <h3>📱 Gerador de QR Code</h3>
+        <p>Gere QR Code de texto, link ou contato.</p>
+        <input type="text" id="qr-input" placeholder="URL, texto, contato...">
+        <button class="btn btn-full" onclick="generateQR()">Gerar QR Code</button>
+        <div id="qr-output" class="output-box" style="text-align:center">Aguardando...</div>
+      </div>
+
+      <div class="tool-card">
+        <h3>🎨 RGB ↔ HEX Conversor</h3>
+        <p>Converta cores entre os formatos.</p>
+        <input type="text" id="color-input" placeholder="#ff0080 ou rgb(255,0,128)">
+        <button class="btn btn-full" onclick="convertColor()">Converter</button>
+        <div class="output-box" id="color-out">Aguardando...</div>
+        <div id="color-preview" style="height:40px;border-radius:8px;margin-top:8px;border:1px solid var(--border)"></div>
+      </div>
+
+      <div class="tool-card">
+        <h3>🔧 Conversor de Unidades</h3>
+        <p>Converta peso, distância e temperatura.</p>
+        <input type="number" id="unit-val" placeholder="Valor">
+        <select id="unit-from">
+          <option value="kg-lb">KG → LB</option>
+          <option value="lb-kg">LB → KG</option>
+          <option value="km-mi">KM → MI</option>
+          <option value="mi-km">MI → KM</option>
+          <option value="c-f">°C → °F</option>
+          <option value="f-c">°F → °C</option>
+          <option value="m-ft">M → FT</option>
+          <option value="ft-m">FT → M</option>
+        </select>
+        <button class="btn btn-full" onclick="convertUnits()">Converter</button>
+        <div class="output-box" id="unit-out">Aguardando...</div>
+      </div>
+
+      <div class="tool-card">
+        <h3>🧹 Remover Linhas Duplicatas</h3>
+        <p>Remove linhas repetidas de uma lista.</p>
+        <textarea id="dup-input" placeholder="Uma linha por item..."></textarea>
+        <button class="btn btn-full" onclick="removeDups()">Remover Duplicatas</button>
+        <div class="output-box" id="dup-out">Aguardando...</div>
+      </div>
+
+      <div class="tool-card">
+        <h3>🔤 Ordenar Lista A-Z / Z-A</h3>
+        <p>Ordena linhas de texto alfabeticamente.</p>
+        <textarea id="sort-input" placeholder="Um item por linha..."></textarea>
+        <div style="display:flex;gap:8px">
+          <button class="btn" style="flex:1" onclick="sortLines('asc')">A → Z</button>
+          <button class="btn" style="flex:1" onclick="sortLines('desc')">Z → A</button>
+        </div>
+        <div class="output-box" id="sort-out">Aguardando...</div>
+      </div>
+
+      <div class="tool-card">
+        <h3>🪪 Gerador de CPF/CNPJ</h3>
+        <p>Gera documentos válidos para testes.</p>
+        <div style="display:flex;gap:8px">
+          <button class="btn" style="flex:1" onclick="genCPF()">Gerar CPF</button>
+          <button class="btn" style="flex:1" onclick="genCNPJ()">Gerar CNPJ</button>
+        </div>
+        <div class="output-box" id="doc-out">Clique para gerar...</div>
+      </div>
+
+      <div class="tool-card">
+        <h3>✂️ Resumidor com IA</h3>
+        <p>A IA resume qualquer texto no idioma original.</p>
+        <textarea id="sum-input" placeholder="Cole o texto longo aqui..."></textarea>
+        <button class="btn btn-full" onclick="summarizeText()">Resumir com IA</button>
+        <div class="output-box" id="sum-out">Aguardando texto...</div>
+      </div>
+
+      <div class="tool-card">
+        <h3>💱 Conversor de Moedas</h3>
+        <p>Conversão baseada em taxas do dia (via IA).</p>
+        <input type="number" id="curr-val" placeholder="Valor" value="100">
+        <select id="curr-from">
+          <option value="BRL">BRL - Real</option>
+          <option value="USD">USD - Dólar</option>
+          <option value="EUR">EUR - Euro</option>
+          <option value="GBP">GBP - Libra</option>
+          <option value="JPY">JPY - Iene</option>
+          <option value="ARS">ARS - Peso AR</option>
+        </select>
+        <select id="curr-to">
+          <option value="USD">USD - Dólar</option>
+          <option value="BRL">BRL - Real</option>
+          <option value="EUR">EUR - Euro</option>
+          <option value="GBP">GBP - Libra</option>
+          <option value="JPY">JPY - Iene</option>
+        </select>
+        <button class="btn btn-full" onclick="convertCurrency()">Converter</button>
+        <div class="output-box" id="curr-out">Aguardando...</div>
+      </div>
+
+      <div class="tool-card">
+        <h3>🎲 Gerador de Lorem Ipsum</h3>
+        <p>Gera texto fictício para testes de layout.</p>
+        <input type="number" id="lorem-count" value="3" placeholder="Parágrafos">
+        <button class="btn btn-full" onclick="genLorem()">Gerar Lorem</button>
+        <div class="output-box" id="lorem-out">Aguardando...</div>
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- /main -->
+
+<!-- ── TICKER ── -->
+<div class="ticker-wrapper">
+  <div class="ticker-track" id="ticker-track"></div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════
+// CURSOR
+// ═══════════════════════════════════════════════════
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursor-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{
+  mx=e.clientX; my=e.clientY;
+  cursor.style.left=(mx-6)+'px'; cursor.style.top=(my-6)+'px';
+});
+function animRing(){
+  rx+=(mx-rx)*0.12; ry+=(my-ry)*0.12;
+  ring.style.left=(rx-16)+'px'; ring.style.top=(ry-16)+'px';
+  requestAnimationFrame(animRing);
+}
+animRing();
+
+// ═══════════════════════════════════════════════════
+// TABS
+// ═══════════════════════════════════════════════════
+function switchTab(id){
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  const idx = ['home','chat','pdf','excel','imagem','video','audio','util'].indexOf(id);
+  document.querySelectorAll('.tab-btn')[idx]?.classList.add('active');
+}
+
+// ═══════════════════════════════════════════════════
+// TICKER
+// ═══════════════════════════════════════════════════
+const tickerItems = [
+  '☕ Feito com café e muita animação',
+  '🤖 Produção independente de <span>Delcidio</span>',
+  '🌐 Multilíngue — responde em qualquer idioma',
+  '⚡ Llama 3 70B via <span>Groq API</span>',
+  '🛠️ 50+ ferramentas em um único painel',
+  '🚀 CID v2.0 — <span>Central Intelligence Digital</span>',
+  '🎨 UI by Claude · Lógica by Groq',
+  '📡 Servidor Node.js · Railway Cloud',
+];
+const track = document.getElementById('ticker-track');
+const html = tickerItems.map(t=>`<span class="ticker-item">${t} &nbsp;·&nbsp; </span>`).join('');
+track.innerHTML = html + html; // duplicate for seamless loop
+
+// ═══════════════════════════════════════════════════
+// CHAT
+// ═══════════════════════════════════════════════════
+let chatMode = 'geral';
+let chatHistory = [];
+
+function setMode(mode, btn){
+  chatMode = mode;
+  document.querySelectorAll('.mode-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function handleKey(e){
+  if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); sendChat(); }
+}
+
+async function sendChat(){
+  const input = document.getElementById('chat-input');
+  const msg = input.value.trim();
+  if(!msg) return;
+
+  addMsg(msg, 'user');
+  chatHistory.push({role:'user', content: msg});
+  input.value = '';
+  input.style.height = 'auto';
+
+  const loadEl = addMsg('<div class="loading-dots"><span></span><span></span><span></span></div>', 'ai');
+
+  document.getElementById('btn-send').disabled = true;
+
+  try {
+    const res = await fetch('/api/chat', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({messages: chatHistory, mode: chatMode})
+    });
+    const data = await res.json();
+    const reply = data.reply || data.error || 'Erro desconhecido';
+    loadEl.innerHTML = `<div class="label">// CID · ${chatMode.toUpperCase()}</div>${escHtml(reply)}`;
+    chatHistory.push({role:'assistant', content: reply});
+    if(chatHistory.length > 20) chatHistory = chatHistory.slice(-20);
+  } catch(e) {
+    loadEl.innerHTML = `<div class="label">// ERRO</div>Falha na conexão com o servidor. Verifique se o backend está rodando.`;
+  }
+
+  document.getElementById('btn-send').disabled = false;
+}
+
+function addMsg(html, role){
+  const msgs = document.getElementById('chat-messages');
+  const div = document.createElement('div');
+  div.className = `msg msg-${role}`;
+  div.innerHTML = html;
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+  return div;
+}
+
+function clearChat(){
+  document.getElementById('chat-messages').innerHTML = '<div class="msg msg-ai"><div class="label">// CID · REINICIADO</div>Conversa limpa! Como posso ajudar?</div>';
+  chatHistory = [];
+}
+
+function escHtml(s){
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+}
+
+// ═══════════════════════════════════════════════════
+// CANVAS UTILS
+// ═══════════════════════════════════════════════════
+function fileToDataURL(file){ return new Promise(r=>{ const fr=new FileReader(); fr.onload=e=>r(e.target.result); fr.readAsDataURL(file); }); }
+function loadImg(src){ return new Promise(r=>{ const i=new Image(); i.onload=()=>r(i); i.src=src; }); }
+
+// ═══════════════════════════════════════════════════
+// PDF TOOLS (client-side simulation)
+// ═══════════════════════════════════════════════════
+function mergePDFs(){ setOut('pdf-merge-out','⚠️ Para juntar PDFs reais, configure o backend com pdf-lib. No modo demo: carregue os arquivos e o servidor processará.\n\nArquivos selecionados: '+document.getElementById('pdf-merge-files').files.length); }
+function splitPDF(){ setOut('pdf-split-out','⚠️ Divisão real requer backend com pdf-lib.\nPáginas: '+document.getElementById('pdf-split-pages').value); }
+function addWatermark(){ setOut('pdf-wm-out','⚠️ Marca d\'água real requer backend.\nTexto: '+document.getElementById('pdf-wm-text').value); }
+function rotatePDF(){ setOut('pdf-rot-out','⚠️ Rotação real requer backend.\nÂngulo: '+document.getElementById('pdf-rot-angle').value+'°'); }
+function pdfToImage(){ setOut('pdf-img-out','⚠️ Conversão real requer backend com pdf2pic.'); }
+function compressPDF(){ setOut('pdf-comp-out','⚠️ Compressão real requer backend. Arquivo: '+(document.getElementById('pdf-comp-file').files[0]?.name||'nenhum')); }
+
+async function analyzePDF(){
+  const file = document.getElementById('pdf-ai-file').files[0];
+  const q = document.getElementById('pdf-ai-q').value.trim() || 'Resuma este documento.';
+  if(!file){ setOut('pdf-ai-out','Selecione um PDF primeiro.'); return; }
+  setOut('pdf-ai-out','Analisando com IA...');
+  try{
+    const reader = new FileReader();
+    reader.onload = async e => {
+      const text = e.target.result.replace(/[^\x20-\x7E\n\r\t\u00C0-\u024F]/g,'').slice(0,4000);
+      const res = await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:[{role:'user',content:`Documento: "${text}"\n\nPergunta: ${q}`}],mode:'geral'})});
+      const data = await res.json();
+      setOut('pdf-ai-out', data.reply || data.error);
+    };
+    reader.readAsText(file);
+  } catch(e){ setOut('pdf-ai-out','Erro: '+e.message); }
+}
+
+// ═══════════════════════════════════════════════════
+// EXCEL TOOLS
+  // ═══════════════════════════════════════════════════
+async function analyzeExcel(){
+  const file = document.getElementById('xl-file').files[0];
+  const q = document.getElementById('xl-q').value.trim() || 'Analise e resuma esta planilha.';
+  if(!file){ setOut('xl-out','Selecione um arquivo.'); return; }
+  setOut('xl-out','Lendo arquivo...');
+  const reader = new FileReader();
+  reader.onload = async e => {
+    const text = e.target.result.slice(0,4000);
+    try{
+      const res = await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:[{role:'user',content:`Planilha CSV:\n${text}\n\nPergunta: ${q}`}],mode:'dados'})});
+      const data = await res.json();
+      setOut('xl-out', data.reply || data.error);
+    } catch(err){ setOut('xl-out','Erro: '+err.message); }
+  };
+  reader.readAsText(file);
+}
+
+async function generateExcel(){
+  const prompt = document.getElementById('xl-gen-prompt').value.trim();
+  if(!prompt){ setOut('xl-gen-out','Digite um prompt.'); return; }
+  setOut('xl-gen-out','Gerando planilha...');
+  try{
+    const res = await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:[{role:'user',content:`Crie uma planilha CSV completa com dados de exemplo para: ${prompt}\n\nResponda APENAS com o CSV, sem explicações.`}],mode:'dados'})});
+    const data = await res.json();
+    const csv = data.reply || '';
+    setOut('xl-gen-out', csv);
+    const blob = new Blob([csv],{type:'text/csv'});
+    const a = Object.assign(document.createElement('a'),{href:URL.createObjectURL(blob),download:'planilha_cid.csv'});
+    a.click();
+  } catch(e){ setOut('xl-gen-out','Erro: '+e.message); }
+}
+
+function convertCSV(){
+  const raw = document.getElementById('csv-convert-in').value.trim();
+  const dir = document.getElementById('csv-convert-dir').value;
+  if(!raw){ setOut('csv-convert-out','Cole os dados.'); return; }
+  try{
+    if(dir==='csv-json'){
+      const lines = raw.split('\n').filter(Boolean);
+      const keys = lines[0].split(',').map(k=>k.trim());
+      const result = lines.slice(1).map(l=>{ const v=l.split(','); return Object.fromEntries(keys.map((k,i)=>[k,v[i]?.trim()])); });
+      setOut('csv-convert-out', JSON.stringify(result, null, 2));
+    } else {
+      const arr = JSON.parse(raw);
+      const keys = Object.keys(arr[0]);
+      const csv = [keys.join(','), ...arr.map(r=>keys.map(k=>r[k]||'').join(','))].join('\n');
+      setOut('csv-convert-out', csv);
+    }
+  } catch(e){ setOut('csv-convert-out','Erro: formato inválido.'); }
+}
+
+function filterCSV(){
+  const raw = document.getElementById('csv-filter-data').value.trim();
+  const col = document.getElementById('csv-filter-col').value.trim();
+  const val = document.getElementById('csv-filter-val').value.trim();
+  const order = document.getElementById('csv-sort-col-order').value;
+  if(!raw){ setOut('csv-filter-out','Cole um CSV.'); return; }
+  const lines = raw.split('\n').filter(Boolean);
+  const keys = lines[0].split(',').map(k=>k.trim());
+  const idx = keys.indexOf(col);
+  let rows = lines.slice(1).map(l=>l.split(',').map(v=>v.trim()));
+  if(val && idx>=0) rows = rows.filter(r=>r[idx]?.toLowerCase().includes(val.toLowerCase()));
+  if(idx>=0) rows.sort((a,b)=>order==='asc'?a[idx]?.localeCompare(b[idx]||''):b[idx]?.localeCompare(a[idx]||''));
+  setOut('csv-filter-out', [keys.join(','),...rows.map(r=>r.join(','))].join('\n'));
+}
+
+function joinCSV(){
+  const rawA = document.getElementById('csv-join-a').value.trim();
+  const rawB = document.getElementById('csv-join-b').value.trim();
+  const col = document.getElementById('csv-join-col').value.trim();
+  if(!rawA||!rawB||!col){ setOut('csv-join-out','Preencha os dois CSVs e a coluna.'); return; }
+  const parseCSV = raw => { const l=raw.split('\n').filter(Boolean); const k=l[0].split(',').map(v=>v.trim()); return { keys:k, rows:l.slice(1).map(r=>Object.fromEntries(k.map((key,i)=>[key,r.split(',')[i]?.trim()]))) }; };
+  const a=parseCSV(rawA), b=parseCSV(rawB);
+  const mapB=Object.fromEntries(b.rows.map(r=>[r[col],r]));
+  const allKeys=[...new Set([...a.keys,...b.keys])];
+  const joined=a.rows.map(r=>allKeys.map(k=>{ const bRow=mapB[r[col]]||{}; return r[k]||bRow[k]||''; }));
+  setOut('csv-join-out', [allKeys.join(','),...joined.map(r=>r.join(','))].join('\n'));
+}
+
+function calcStats(){
+  const raw = document.getElementById('csv-stats-data').value.trim();
+  const col = document.getElementById('csv-stats-col').value.trim();
+  if(!raw||!col){ setOut('csv-stats-out','Cole CSV e nome da coluna.'); return; }
+  const lines = raw.split('\n').filter(Boolean);
+  const keys = lines[0].split(',').map(k=>k.trim());
+  const idx = keys.indexOf(col);
+  if(idx<0){ setOut('csv-stats-out','Coluna não encontrada.'); return; }
+  const vals = lines.slice(1).map(l=>parseFloat(l.split(',')[idx])).filter(v=>!isNaN(v));
+  const sum=vals.reduce((a,b)=>a+b,0), n=vals.length;
+  setOut('csv-stats-out',`Coluna: ${col}\nLinhas: ${n}\nSoma: ${sum.toFixed(2)}\nMédia: ${(sum/n).toFixed(2)}\nMínimo: ${Math.min(...vals).toFixed(2)}\nMáximo: ${Math.max(...vals).toFixed(2)}`);
+}
+
+// ═══════════════════════════════════════════════════
+// IMAGE TOOLS
+// ═══════════════════════════════════════════════════
+async function generateImage(){
+  const prompt = document.getElementById('img-gen-prompt').value.trim();
+  if(!prompt){ setOut('img-gen-out','Digite um prompt.'); return; }
+  setOut('img-gen-out','Gerando imagem... aguarde');
+  const [w,h] = document.getElementById('img-gen-size').value.split('x');
+  try{
+    const res = await fetch(`/api/generate-image?prompt=${encodeURIComponent(prompt)}&width=${w}&height=${h}`);
+    const data = await res.json();
+    const img = document.getElementById('img-gen-preview');
+    img.src = data.url; img.style.display='block';
+    setOut('img-gen-out','✅ Imagem gerada! URL: '+data.url);
+  } catch(e){ setOut('img-gen-out','Erro: '+e.message); }
+}
+
+async function analyzeImage(){
+  const file = document.getElementById('img-analyze-file').files[0];
+  const q = document.getElementById('img-analyze-q').value.trim() || 'Descreva esta imagem detalhadamente.';
+  if(!file){ setOut('img-analyze-out','Selecione uma imagem.'); return; }
+  setOut('img-analyze-out','Analisando com IA...');
+  try{
+    const fd = new FormData(); fd.append('image', file); fd.append('message', q);
+    const res = await fetch('/api/chat-image',{method:'POST',body:fd});
+    const data = await res.json();
+    setOut('img-analyze-out', data.reply || data.error);
+  } catch(e){ setOut('img-analyze-out','Erro: '+e.message+'. Verifique se o backend está online.'); }
+}
+
+async function resizeImage(){
+  const file=document.getElementById('img-resize-file').files[0];
+  const w=parseInt(document.getElementById('img-resize-w').value);
+  const h=parseInt(document.getElementById('img-resize-h').value);
+  if(!file||!w||!h){ setOut('img-resize-out','Selecione imagem e dimensões.'); return; }
+  const src=await fileToDataURL(file), img=await loadImg(src);
+  const c=document.createElement('canvas'); c.width=w; c.height=h;
+  c.getContext('2d').drawImage(img,0,0,w,h);
+  const url=c.toDataURL('image/png');
+  showPreview('img-resize-preview',url);
+  setOut('img-resize-out',`✅ Redimensionado: ${w}×${h}px`);
+  dlImg(url,'imagem_resized.png');
+}
+
+async function convertImage(){
+  const file=document.getElementById('img-conv-file').files[0];
+  const fmt=document.getElementById('img-conv-format').value;
+  if(!file){ setOut('img-conv-out','Selecione uma imagem.'); return; }
+  const src=await fileToDataURL(file), img=await loadImg(src);
+  const c=document.createElement('canvas'); c.width=img.width; c.height=img.height;
+  c.getContext('2d').drawImage(img,0,0);
+  const url=c.toDataURL(fmt,0.92);
+  showPreview('img-conv-preview',url);
+  const ext=fmt.split('/')[1].replace('jpeg','jpg');
+  setOut('img-conv-out',`✅ Convertido para ${ext.toUpperCase()}`);
+  dlImg(url,'imagem_convertida.'+ext);
+}
+
+async function compressImage(){
+  const file=document.getElementById('img-comp-file').files[0];
+  const q=parseInt(document.getElementById('img-comp-quality').value)/100;
+  if(!file){ setOut('img-comp-out','Selecione uma imagem.'); return; }
+  const src=await fileToDataURL(file), img=await loadImg(src);
+  const c=document.createElement('canvas'); c.width=img.width; c.height=img.height;
+  c.getContext('2d').drawImage(img,0,0);
+  const url=c.toDataURL('image/jpeg',q);
+  showPreview('img-comp-preview',url);
+  const orig=file.size; const comp=Math.round(url.length*0.75);
+  setOut('img-comp-out',`✅ Original: ${(orig/1024).toFixed(1)}KB\nComprimido: ~${(comp/1024).toFixed(1)}KB\nQualidade: ${Math.round(q*100)}%`);
+  dlImg(url,'imagem_comprimida.jpg');
+}
+
+async function watermarkImage(){
+  const file=document.getElementById('img-wm-file').files[0];
+  const text=document.getElementById('img-wm-text').value||'CID';
+  const pos=document.getElementById('img-wm-pos').value;
+  if(!file){ setOut('img-wm-out','Selecione uma imagem.'); return; }
+  const src=await fileToDataURL(file), img=await loadImg(src);
+  const c=document.createElement('canvas'); c.width=img.width; c.height=img.height;
+  const ctx=c.getContext('2d'); ctx.drawImage(img,0,0);
+  ctx.font=`bold ${Math.floor(img.width/12)}px Arial`;
+  ctx.fillStyle='rgba(255,255,255,0.5)';
+  ctx.textAlign='center';
+  const [x,y]=pos==='center'?[img.width/2,img.height/2]:pos==='bottom-right'?[img.width-20,img.height-20]:[20,40];
+  ctx.fillText(text,x,y);
+  const url=c.toDataURL('image/png');
+  showPreview('img-wm-preview',url);
+  setOut('img-wm-out','✅ Marca d\'água adicionada!');
+  dlImg(url,'imagem_marcada.png');
+}
+
+async function joinImages(){
+  const fa=document.getElementById('img-join-a').files[0];
+  const fb=document.getElementById('img-join-b').files[0];
+  const dir=document.getElementById('img-join-dir').value;
+  if(!fa||!fb){ setOut('img-join-out','Selecione as duas imagens.'); return; }
+  const [ia,ib]=[await loadImg(await fileToDataURL(fa)),await loadImg(await fileToDataURL(fb))];
+  const c=document.createElement('canvas');
+  if(dir==='h'){ c.width=ia.width+ib.width; c.height=Math.max(ia.height,ib.height); }
+  else { c.width=Math.max(ia.width,ib.width); c.height=ia.height+ib.height; }
+  const ctx=c.getContext('2d'); ctx.drawImage(ia,0,0);
+  if(dir==='h') ctx.drawImage(ib,ia.width,0); else ctx.drawImage(ib,0,ia.height);
+  const url=c.toDataURL('image/png');
+  showPreview('img-join-preview',url);
+  setOut('img-join-out','✅ Imagens unidas!');
+  dlImg(url,'imagens_unidas.png');
+}
+
+async function imageToPDF(){
+  setOut('img-topdf-out','Para converter imagem em PDF real, configure o backend com jsPDF ou pdfkit.');
+}
+
+async function compareImages(){
+  const fa=document.getElementById('img-cmp-a').files[0];
+  const fb=document.getElementById('img-cmp-b').files[0];
+  if(!fa||!fb){ setOut('img-cmp-out','Selecione as duas imagens.'); return; }
+  setOut('img-cmp-out','Comparando com IA...');
+  try{
+    const [da,db]=[await fileToDataURL(fa),await fileToDataURL(fb)];
+    const res=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:[{role:'user',content:`Compare duas imagens. Imagem A: ${fa.name} (${(fa.size/1024).toFixed(1)}KB). Imagem B: ${fb.name} (${(fb.size/1024).toFixed(1)}KB). Descreva as diferenças esperadas e sugira melhorias baseado nos nomes e tamanhos.`}],mode:'design'})});
+    const data=await res.json();
+    setOut('img-cmp-out', data.reply||data.error);
+  } catch(e){ setOut('img-cmp-out','Erro: '+e.message); }
+}
+
+async function extractPalette(){
+  const file=document.getElementById('img-pal-file').files[0];
+  if(!file){ setOut('img-pal-out','Selecione uma imagem.'); return; }
+  const src=await fileToDataURL(file), img=await loadImg(src);
+  const c=document.createElement('canvas'); c.width=50; c.height=50;
+  const ctx=c.getContext('2d'); ctx.drawImage(img,0,0,50,50);
+  const data=ctx.getImageData(0,0,50,50).data;
+  const colors={};
+  for(let i=0;i<data.length;i+=20){
+    const r=Math.round(data[i]/32)*32,g=Math.round(data[i+1]/32)*32,b=Math.round(data[i+2]/32)*32;
+    const hex=`#${r.toString(16).padStart(2,'0')}${g.toString(16).padStart(2,'0')}${b.toString(16).padStart(2,'0')}`;
+    colors[hex]=(colors[hex]||0)+1;
+  }
+  const top=Object.entries(colors).sort((a,b)=>b[1]-a[1]).slice(0,8);
+  setOut('img-pal-out',top.map(([h])=>h).join('\n'));
+  const sw=document.getElementById('img-pal-swatches');
+  sw.innerHTML=top.map(([h])=>`<div title="${h}" style="width:36px;height:36px;background:${h};border-radius:6px;border:1px solid var(--border)" onclick="navigator.clipboard.writeText('${h}')"></div>`).join('');
+}
+
+function showPreview(id,url){ const img=document.getElementById(id); img.src=url; img.style.display='block'; }
+function dlImg(url,name){ const a=document.createElement('a'); a.href=url; a.download=name; a.click(); }
+
+// ═══════════════════════════════════════════════════
+// VIDEO
+// ═══════════════════════════════════════════════════
+let videoCuts=[];
+function loadVideo(){
+  const file=document.getElementById('vid-file').files[0];
+  if(!file) return;
+  const player=document.getElementById('video-player');
+  const ph=document.getElementById('vid-placeholder');
+  player.src=URL.createObjectURL(file);
+  player.style.display='block'; ph.style.display='none';
+  document.getElementById('vid-info').textContent=`${file.name} · ${(file.size/1024/1024).toFixed(1)}MB`;
+}
+function applyVideoFilter(){ document.getElementById('video-player').style.filter=document.getElementById('vid-filter').value; }
+function setVideoSpeed(v){ document.getElementById('video-player').playbackRate=v; document.getElementById('vid-speed-label').textContent=v+'x'; }
+function setVideoVol(v){ document.getElementById('video-player').volume=Math.min(v,1); document.getElementById('vid-vol-label').textContent=Math.round(v*100)+'%'; }
+function setOverlay(v){
+  const d=document.getElementById('vid-overlay-display');
+  const t=document.getElementById('vid-overlay-text');
+  if(v){ d.style.display='block'; t.textContent=v; } else { d.style.display='none'; }
+}
+function markCut(){
+  const p=document.getElementById('video-player');
+  if(!p.src){ setOut('vid-cuts-out','Carregue um vídeo primeiro.'); return; }
+  const t=p.currentTime;
+  videoCuts.push(t);
+  setOut('vid-cuts-out','Pontos de corte:\n'+videoCuts.map((c,i)=>`[${i+1}] ${formatTime(c)}`).join('\n'));
+}
+function clearCuts(){ videoCuts=[]; setOut('vid-cuts-out','Marcações limpas.'); }
+function addAudioTrack(){ setOut('vid-audio-out','Trilha sonora no browser requer Web Audio API. Backend com FFmpeg necessário para merge real.'); }
+async function generateCaptions(){
+  const topic=document.getElementById('vid-caption-topic').value.trim();
+  if(!topic){ setOut('vid-caption-out','Descreva o vídeo.'); return; }
+  setOut('vid-caption-out','Gerando legendas...');
+  try{
+    const res=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:[{role:'user',content:`Gere legendas/roteiro em formato SRT para um vídeo sobre: ${topic}. Crie 10 legendas numeradas com timestamps.`}],mode:'copywriter'})});
+    const data=await res.json();
+    setOut('vid-caption-out', data.reply||data.error);
+  } catch(e){ setOut('vid-caption-out','Erro: '+e.message); }
+}
+
+// ═══════════════════════════════════════════════════
+// AUDIO
+// ═══════════════════════════════════════════════════
+let audioCtx, analyser, source, animId, audioEl;
+function loadAudio(){
+  const file=document.getElementById('aud-file').files[0];
+  if(!file) return;
+  if(audioEl){ audioEl.pause(); audioEl=null; }
+  if(audioCtx) audioCtx.close();
+  audioCtx=new AudioContext();
+  analyser=audioCtx.createAnalyser(); analyser.fftSize=128;
+  audioEl=new Audio(URL.createObjectURL(file));
+  source=audioCtx.createMediaElementSource(audioEl);
+  source.connect(analyser); analyser.connect(audioCtx.destination);
+  audioEl.ontimeupdate=()=>{
+    const p=audioEl.currentTime/audioEl.duration*100;
+    document.getElementById('aud-seek').value=p||0;
+    document.getElementById('aud-time').textContent=formatTime(audioEl.currentTime);
+  };
+  drawVisualizer();
+}
+function toggleAudio(){
+  if(!audioEl) return;
+  if(audioEl.paused){ audioCtx.resume(); audioEl.play(); document.getElementById('aud-play-btn').textContent='⏸ Pause'; }
+  else { audioEl.pause(); document.getElementById('aud-play-btn').textContent='▶ Play'; }
+}
+function seekAudio(v){ if(audioEl) audioEl.currentTime=audioEl.duration*(v/100); }
+function setAudioVolume(v){ if(audioEl) audioEl.volume=Math.min(v,1); document.getElementById('aud-vol-label').textContent='Volume: '+Math.round(v*100)+'%'; }
+function downloadAudio(){
+  if(!audioEl){ setOut('aud-dl-out','Carregue um áudio primeiro.'); return; }
+  const a=document.createElement('a'); a.href=audioEl.src; a.download='audio_cid.mp3'; a.click();
+  setOut('aud-dl-out','✅ Download iniciado!');
+}
+function drawVisualizer(){
+  const canvas=document.getElementById('audio-visualizer');
+  const ctx=canvas.getContext('2d');
+  const buf=new Uint8Array(analyser.frequencyBinCount);
+  function draw(){
+    animId=requestAnimationFrame(draw);
+    analyser.getByteFrequencyData(buf);
+    ctx.fillStyle='#000'; ctx.fillRect(0,0,canvas.width,canvas.height);
+    const bw=canvas.width/buf.length;
+    buf.forEach((v,i)=>{
+      const h=v/255*canvas.height;
+      const hue=180+i*2;
+      ctx.fillStyle=`hsl(${hue},100%,60%)`;
+      ctx.fillRect(i*bw,canvas.height-h,bw-1,h);
+    });
+  }
+  draw();
+}
+function cutAudio(){ setOut('aud-cut-out','Corte real requer Web Audio API avançado ou backend FFmpeg. Início: '+document.getElementById('aud-cut-start').value+'s, Fim: '+document.getElementById('aud-cut-end').value+'s'); }
+async function analyzeMusicStyle(){
+  const q=document.getElementById('aud-analyze-q').value.trim();
+  if(!q){ setOut('aud-analyze-out','Descreva a música.'); return; }
+  setOut('aud-analyze-out','Analisando...');
+  try{
+    const res=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:[{role:'user',content:`Analise este estilo musical e forneça: gênero, subgênero, BPM estimado, instrumentos prováveis, influências, humor/vibe e 3 músicas similares.\n\nDescrição: ${q}`}],mode:'geral'})});
+    const data=await res.json();
+    setOut('aud-analyze-out', data.reply||data.error);
+  } catch(e){ setOut('aud-analyze-out','Erro: '+e.message); }
+}
+
+// ═══════════════════════════════════════════════════
+// UTILITIES
+// ═══════════════════════════════════════════════════
+function countWords(){
+  const t=document.getElementById('wc-input').value;
+  const words=t.trim()?t.trim().split(/\s+/).length:0;
+  setOut('wc-out',`Palavras: ${words}\nCaracteres: ${t.length}\nCaracteres (sem espaço): ${t.replace(/\s/g,'').length}\nLinhas: ${t.split('\n').length}`);
+}
+function generatePassword(){
+  const len=parseInt(document.getElementById('pw-len').value)||16;
+  let chars='abcdefghijklmnopqrstuvwxyz';
+  if(document.getElementById('pw-upper').checked) chars+='ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  if(document.getElementById('pw-num').checked) chars+='0123456789';
+  if(document.getElementById('pw-sym').checked) chars+='!@#$%^&*()-_=+[]{}|;:,.<>?';
+  let pw=''; for(let i=0;i<len;i++) pw+=chars[Math.floor(Math.random()*chars.length)];
+  setOut('pw-out',pw);
+}
+function b64Encode(){ try{ setOut('b64-out', btoa(unescape(encodeURIComponent(document.getElementById('b64-input').value)))); } catch(e){ setOut('b64-out','Erro: '+e.message); } }
+function b64Decode(){ try{ setOut('b64-out', decodeURIComponent(escape(atob(document.getElementById('b64-input').value)))); } catch(e){ setOut('b64-out','Erro: Base64 inválido.'); } }
+function formatJSON(){ try{ setOut('json-out', JSON.stringify(JSON.parse(document.getElementById('json-input').value), null, 2)); } catch(e){ setOut('json-out','❌ JSON inválido: '+e.message); } }
+function diffTexts(){
+  const a=document.getElementById('diff-a').value.split('\n');
+  const b=document.getElementById('diff-b').value.split('\n');
+  const result=[];
+  b.forEach((line,i)=>{ if(a[i]===line) result.push('  '+line); else if(!a[i]) result.push('+ '+line); else result.push('- '+a[i]+'\n+ '+line); });
+  a.slice(b.length).forEach(l=>result.push('- '+l));
+  setOut('diff-out', result.join('\n'));
+}
+async function generateQR(){
+  const text=document.getElementById('qr-input').value.trim();
+  if(!text){ setOut('qr-output','Digite um texto.'); return; }
+  try{
+    const res=await fetch('/api/qrcode',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text})});
+    const data=await res.json();
+    document.getElementById('qr-output').innerHTML=`<img src="${data.qr}" style="max-width:180px;border-radius:8px;border:2px solid var(--cyan)">`;
+  } catch(e){ setOut('qr-output','QR local: https://api.qrserver.com/v1/create-qr-code/?size=200x200&data='+encodeURIComponent(text)); document.getElementById('qr-output').innerHTML=`<img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(text)}" style="max-width:180px;border-radius:8px">`; }
+}
+function convertColor(){
+  const v=document.getElementById('color-input').value.trim();
+  let hex='', r=0,g=0,b=0;
+  if(v.startsWith('#')){ hex=v; const n=parseInt(v.slice(1),16); r=(n>>16)&255; g=(n>>8)&255; b=n&255; }
+  else { const m=v.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/i); if(m){ r=+m[1];g=+m[2];b=+m[3]; hex=`#${r.toString(16).padStart(2,'0')}${g.toString(16).padStart(2,'0')}${b.toString(16).padStart(2,'0')}`; } }
+  if(hex){ setOut('color-out',`HEX: ${hex}\nRGB: rgb(${r}, ${g}, ${b})\nHSL: (calculando...)`); document.getElementById('color-preview').style.background=hex; }
+  else { setOut('color-out','Formato inválido. Use #RRGGBB ou rgb(r,g,b)'); }
+}
+function convertUnits(){
+  const v=parseFloat(document.getElementById('unit-val').value);
+  const t=document.getElementById('unit-from').value;
+  if(isNaN(v)){ setOut('unit-out','Digite um valor.'); return; }
+  const conv={'kg-lb':v*2.20462,'lb-kg':v/2.20462,'km-mi':v*0.621371,'mi-km':v*1.60934,'c-f':v*9/5+32,'f-c':(v-32)*5/9,'m-ft':v*3.28084,'ft-m':v/3.28084};
+  const labels={'kg-lb':'lb','lb-kg':'kg','km-mi':'mi','mi-km':'km','c-f':'°F','f-c':'°C','m-ft':'ft','ft-m':'m'};
+  setOut('unit-out',`${v} ${t.split('-')[0].toUpperCase()} = ${conv[t].toFixed(4)} ${labels[t]}`);
+}
+function removeDups(){
+  const lines=document.getElementById('dup-input').value.split('\n');
+  const unique=[...new Set(lines.map(l=>l.trim()).filter(Boolean))];
+  setOut('dup-out',`Removidas: ${lines.length-unique.length} duplicatas\n\n${unique.join('\n')}`);
+}
+function sortLines(dir){
+  const lines=document.getElementById('sort-input').value.split('\n').filter(Boolean);
+  const sorted=[...lines].sort((a,b)=>dir==='asc'?a.localeCompare(b):b.localeCompare(a));
+  setOut('sort-out',sorted.join('\n'));
+}
+function genCPF(){
+  function mod(d,x){ const r=x%11; return r<2?0:11-r; }
+  const n=Array.from({length:9},()=>Math.floor(Math.random()*10));
+  const d1=mod(n,n.reduce((s,v,i)=>s+v*(10-i),0)*10);
+  const d2=mod(n,[...n,d1].reduce((s,v,i)=>s+v*(11-i),0)*10);
+  const cpf=[...n,d1,d2];
+  setOut('doc-out',`CPF: ${cpf.slice(0,3).join('')}.${cpf.slice(3,6).join('')}.${cpf.slice(6,9).join('')}-${cpf[9]}${cpf[10]}`);
+}
+function genCNPJ(){
+  const n=Array.from({length:12},()=>Math.floor(Math.random()*9));
+  const calc=(arr,w)=>{ const s=arr.reduce((a,v,i)=>a+v*w[i],0); const r=s%11; return r<2?0:11-r; };
+  const w1=[5,4,3,2,9,8,7,6,5,4,3,2];
+  const w2=[6,5,4,3,2,9,8,7,6,5,4,3,2];
+  const d1=calc(n,w1); const d2=calc([...n,d1],w2);
+  const c=[...n,d1,d2];
+  setOut('doc-out',`CNPJ: ${c.slice(0,2).join('')}.${c.slice(2,5).join('')}.${c.slice(5,8).join('')}/${c.slice(8,12).join('')}-${c[12]}${c[13]}`);
+}
+async function summarizeText(){
+  const text=document.getElementById('sum-input').value.trim();
+  if(!text){ setOut('sum-out','Cole um texto.'); return; }
+  setOut('sum-out','Resumindo...');
+  try{
+    const res=await fetch('/api/summarize',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text})});
+    const data=await res.json();
+    setOut('sum-out', data.summary||data.error);
+  } catch(e){ setOut('sum-out','Erro: '+e.message); }
+}
+async function convertCurrency(){
+  const val=document.getElementById('curr-val').value;
+  const from=document.getElementById('curr-from').value;
+  const to=document.getElementById('curr-to').value;
+  setOut('curr-out','Consultando taxa...');
+  try{
+    const res=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:[{role:'user',content:`Converta ${val} ${from} para ${to} usando a taxa de câmbio atual aproximada. Responda APENAS com o resultado no formato: "X ${to}" e a taxa usada.`}],mode:'financeiro'})});
+    const data=await res.json();
+    setOut('curr-out', data.reply||data.error);
+  } catch(e){ setOut('curr-out','Erro: '+e.message); }
+}
+function genLorem(){
+  const n=parseInt(document.getElementById('lorem-count').value)||3;
+  const p='Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.';
+  setOut('lorem-out', Array(n).fill(p).join('\n\n'));
+}
+
+// ═══════════════════════════════════════════════════
+// HELPERS
+// ═══════════════════════════════════════════════════
+function setOut(id, text){ const el=document.getElementById(id); if(el) el.textContent=text; }
+function formatTime(s){ const m=Math.floor(s/60); return `${m}:${String(Math.floor(s%60)).padStart(2,'0')}`; }
+
+// ═══════════════════════════════════════════════════
+// STATUS CHECK
+// ═══════════════════════════════════════════════════
+async function checkStatus(){
+  try{
+    const res=await fetch('/api/status');
+    const d=await res.json();
+    setOut('status-box',`Status: ${d.status}\nVersão: ${d.version}\nModelo: ${d.model}\nFerramentas: ${d.tools}\nUptime: ${Math.round(d.uptime)}s`);
+  } catch(e){
+    setOut('status-box','⚠️ Backend offline\nAcesse via: node server.js\nPorta: 3000\n\nDeploy: Railway.app');
+  }
+}
+checkStatus();
+</script>
+</body>
+</html>
+  
