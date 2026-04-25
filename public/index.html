@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🤖 CID — Central Intelligence Digital</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Inter:wght@300;400;500;600&display=swap');
+
+  :root {
+    --bg: #0e0e0e;
+    --bg2: #141414;
+    --bg3: #1a1a1a;
+    --card: #181818;
+    --border: #2a2a2a;
+    --cyan: #00f5ff;
+    --cyan2: #00c4cc;
+    --cyan-dim: rgba(0,245,255,0.1);
+    --cyan-glow: 0 0 20px rgba(0,245,255,0.4);
+    --pink: #ff0080;
+    --yellow: #ffd700;
+    --green: #00ff88;
+    --text: #e8e8e8;
+    --text-dim: #888;
+    --radius: 14px;
+    --font-mono: 'Share Tech Mono', monospace;
+    --font-display: 'Orbitron', sans-serif;
+    --font-body: 'Inter', sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    min-height: 100vh;
+    cursor: none;
+    overflow-x: hidden;
+  }
+
+  /* Custom cursor */
+  #cursor {
+    width: 12px; height: 12px;
+    background: var(--cyan);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    transition: transform 0.1s;
+    box-shadow: var(--cyan-glow);
+  }
+  #cursor-ring {
+    width: 32px; height: 32px;
+    border: 1px solid var(--cyan);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9998;
+    transition: all 0.15s ease;
+    opacity: 0.5;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: linear-gradient(180deg, #0a0a0a 0%, var(--bg) 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 0 20px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .header-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+    gap: 16px;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  /* Robozinho Chibi */
+  .chibi {
+    width: 44px;
+    height: 44px;
+    animation: float 3s ease-in-out infinite;
+    filter: drop-shadow(0 0 8px var(--cyan));
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-6px); }
+  }
+
+  .logo-text {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 900;
+    letter-spacing: 2px;
+  }
+
+  .logo-text span {
+    background: linear-gradient(90deg, var(--cyan), var(--pink));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .logo-sub {
+    font-family: var(--font-mono);
+    font-size: 0.55rem;
+    color: var(--cyan);
+    letter-spacing: 1px;
+    margin-top: 1px;
+    opacity: 0.7;
+  }
+
+  .header-badges {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .badge {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    padding: 3px 8px;
+    border-radius: 4px;
+    border: 1px solid;
+    letter-spacing: 1px;
+  }
+
+  .badge-online {
+    color: var(--green);
+    border-color: var(--green);
+    background: rgba(0,255,136,0.08);
+    animation: pulse-green 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse-green {
+    0%, 100% { box-shadow: 0 0 0 rgba(0,255,136,0); }
+    50% { box-shadow: 0 0 8px rgba(0,255,136,0.4); }
+  }
+
+  .badge-model {
+    color: var(--cyan);
+    border-color: var(--cyan2);
+    background: var(--cyan-dim);
+  }
+
+  .header-title {
+    font-family: var(--font-display);
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    text-align: right;
+    display: none;
+  }
+
+  @media (min-width: 600px) { .header-title { display: block; } }
+
+  /* ── HERO ── */
+  .hero {
+    text-align: center;
+    padding: 32px 20px 20px;
+    position: relative;
+  }
+
+  .hero h1 {
+    font-family: var(--font-display);
+    font-size: clamp(1.4rem, 5vw, 2.8rem);
+    font-weight: 900;
+    letter-spacing: 4px;
+    line-height: 1.2;
+  }
+
+  .hero h1 .olá { color: var(--text-dim); }
+  .hero h1 .eu { color: var(--pink); }
+  .hero h1 .sou { color: var(--yellow); }
+  .hero h1 .cid { color: var(--cyan); text-shadow: var(--cyan-glow); }
+
+  .hero-sub {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    margin-top: 8px;
+    letter-spacing: 2px;
+  }
+
+  /* ── TABS ── */
+  .tabs-wrapper {
+    padding: 0 16px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .tabs-wrapper::-webkit-scrollbar { display: none; }
+
+  .tabs {
+    display: flex;
+    gap: 4px;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 12px 0;
+    min-width: max-content;
+  }
+
+  .tab-btn {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--bg2);
+    color: var(--text-dim);
+    cursor: none;
+    transition: all 0.2s;
+    white-space: nowrap;
+    letter-spacing: 0.5px;
+  }
+
+  .tab-btn:hover {
+    border-color: var(--cyan2);
+    color: var(--cyan);
+    background: var(--cyan-dim);
+  }
+
+  .tab-btn.active {
+    border-color: var(--cyan);
+    color: var(--cyan);
+    background: var(--cyan-dim);
+    box-shadow: 0 0 12px rgba(0,245,255,0.2);
+  }
+
+  /* ── MAIN CONTENT ── */
+  .main {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 16px 16px 80px;
+  }
+
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* ── HOME GRID ── */
+  .home-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 12px;
+    margin-top: 8px;
+  }
+
+  .home-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 16px;
+    text-align: center;
+    cursor: none;
+    transition: all 0.25s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .home-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--cyan-dim), transparent);
+    opacity: 0;
+    transition: opacity 0.25s;
+  }
+
+  .home-card:hover::before { opacity: 1; }
+  .home-card:hover {
+    border-color: var(--cyan2);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(0,245,255,0.15);
+  }
+
+  .home-card-icon { font-size: 2rem; margin-bottom: 8px; }
+
+  .home-card-count {
+    font-family: var(--font-display);
+    font-size: 1.6rem;
+    font-weight: 900;
+    color: var(--cyan);
+    text-shadow: var(--cyan-glow);
+    line-height: 1;
+  }
+
+  .home-card-label {
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    margin-top: 4px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .home-card-tools {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    color: var(--cyan2);
+    margin-top: 8px;
+    line-height: 1.6;
+    text-align: left;
+  }
+
+  /* ── SECTION TITLE ── */
+  .section-title {
+    font-family: var(--font-display);
+    font-size: 0.8rem;
+    color: var(--cyan);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* ── CHAT ── */
+  .chat-layout {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 16px;
+    height: calc(100vh - 280px);
+    min-height: 400px;
+  }
+
+  @media (max-width: 700px) {
+    .chat-layout { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
+  }
+
+  .mode-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .mode-btn {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--bg2);
+    color: var(--text-dim);
+    cursor: none;
+    transition: all 0.15s;
+    text-align: left;
+    letter-spacing: 0.5px;
+  }
+
+  .mode-btn:hover, .mode-btn.active {
+    border-color: var(--cyan);
+    color: var(--cyan);
+    background: var(--cyan-dim);
+  }
+
+  .chat-box {
+    display: flex;
+    flex-direction: column;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+
+  .msg {
+    max-width: 85%;
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  .msg-user {
+    background: var(--cyan-dim);
+    border: 1px solid var(--cyan2);
+    color: var(--text);
+    align-self: flex-end;
+    border-radius: 12px 12px 2px 12px;
+  }
+
+  .msg-ai {
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--text);
+    align-self: flex-start;
+    border-radius: 12px 12px 12px 2px;
+  }
+
+  .msg-ai .label {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    color: var(--cyan);
+    margin-bottom: 4px;
+    letter-spacing: 1px;
+  }
+
+  .chat-input-row {
+    display: flex;
+    gap: 8px;
+    padding: 12px;
+    border-top: 1px solid var(--border);
+    background: var(--bg);
+  }
+
+  .chat-input {
+    flex: 1;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 14px;
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    resize: none;
+    outline: none;
+    transition: border-color 0.2s;
+    min-height: 42px;
+    max-height: 120px;
+  }
+
+  .chat-input:focus { border-color: var(--cyan2); }
+
+  .btn-send {
+    background: var(--cyan);
+    color: #000;
+    font-family: var(--font-display);
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 0 18px;
+    border: none;
+    border-radius: 10px;
+    cursor: none;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+
+  .btn-send:hover {
+    background: var(--cyan2);
+    box-shadow: var(--cyan-glow);
+  }
+
+  .btn-send:disabled { opacity: 0.4; }
+
+  /* ── TOOLS GRID (PDF, Excel, etc.) ── */
+  .tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 14px;
+  }
+
+  .tool-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    transition: all 0.2s;
+  }
+
+  .tool-card:hover {
+    border-color: var(--cyan2);
+    box-shadow: 0 4px 16px rgba(0,245,255,0.1);
+  }
+
+  .tool-card h3 {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--cyan);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .tool-card p {
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    margin-bottom: 14px;
+    line-height: 1.5;
+  }
+
+  .tool-card textarea, .tool-card input[type="text"], .tool-card input[type="number"] {
+    width: 100%;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 12px;
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    outline: none;
+    transition: border-color 0.2s;
+    resize: vertical;
+    min-height: 70px;
+    margin-bottom: 10px;
+  }
+
+  .tool-card input[type="text"], .tool-card input[type="number"] {
+    min-height: unset;
+  }
+
+  .tool-card textarea:focus, .tool-card input:focus { border-color: var(--cyan2); }
+
+  .tool-card input[type="file"] {
+    width: 100%;
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    margin-bottom: 10px;
+    cursor: none;
+  }
+
+  .tool-card select {
+    width: 100%;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 12px;
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    outline: none;
+    margin-bottom: 10px;
+    cursor: none;
+  }
+
+  .btn {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 1px solid var(--cyan2);
+    background: var(--cyan-dim);
+    color: var(--cyan);
+    cursor: none;
+    transition: all 0.2s;
+    letter-spacing: 0.5px;
+    display: inline-block;
+  }
+
+  .btn:hover {
+    background: var(--cyan);
+    color: #000;
+    box-shadow: var(--cyan-glow);
+  }
+
+  .btn-full { width: 100%; text-align: center; display: block; }
+
+  .output-box {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--green);
+    min-height: 60px;
+    max-height: 200px;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    word-break: break-all;
+    margin-top: 10px;
+    line-height: 1.6;
+  }
+
+  /* ── TICKER ── */
+  .ticker-wrapper {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(90deg, #0a0a0a, var(--bg2), #0a0a0a);
+    border-top: 1px solid var(--border);
+    padding: 6px 0;
+    overflow: hidden;
+    z-index: 50;
+  }
+
+  .ticker-track {
+    display: flex;
+    gap: 0;
+    animation: ticker 30s linear infinite;
+    white-space: nowrap;
+  }
+
+  @keyframes ticker {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  .ticker-item {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--text-dim);
+    padding: 0 40px;
+    letter-spacing: 1px;
+  }
+
+  .ticker-item span { color: var(--cyan); }
+
+  /* ── LOADING ── */
+  .loading-dots {
+    display: inline-flex;
+    gap: 4px;
+    align-items: center;
+  }
+
+  .loading-dots span {
+    width: 6px;
+    height: 6px;
+    background: var(--cyan);
+    border-radius: 50%;
+    animation: dot-bounce 1.4s ease-in-out infinite;
+  }
+
+  .loading-dots span:nth-child(2) { animation-delay: 0.2s; }
+  .loading-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+  @keyframes dot-bounce {
+    0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+    40% { transform: scale(1); opacity: 1; }
+  }
+
+  /* ── IMAGE TOOLS ── */
+  .img-preview {
+    max-width: 100%;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    margin-top: 10px;
+    display: none;
+  }
+
+  /* ── UTILITIES COLS ── */
+  .util-cols {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 14px;
+  }
+
+  /* ── QR PREVIEW ── */
+  #qr-output img {
+    max-width: 200px;
+    border-radius: 8px;
+    border: 2px solid var(--cyan);
+    margin-top: 10px;
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 4px; height: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+  /* Mobile */
+  @media (max-width: 480px) {
+    .home-grid { grid-template-columns: repeat(2, 1fr); }
+    .tools-grid, .util-cols { grid-template-columns: 1fr; }
+    .hero h1 { font-size: 1.2rem; }
+    .mode-list { flex-direction: row; flex-wrap: wrap; }
+  }
+
+  .spinner {
+    display: inline-block;
+    width: 14px; height: 14px;
+    border: 2px solid var(--border);
+    border-top-color: var(--cyan);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    vertical-align: middle;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .tag-up {
+    font-family: var(--font-mono);
+    font-size: 0.55rem;
+    background: rgba(255,0,128,0.15);
+    color: var(--pink);
+    border: 1px solid var(--pink);
+    border-radius: 4px;
+    padding: 1px 5px;
+    letter-spacing: 1px;
+    vertical-align: middle;
+  }
+
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 24px 0;
+  }
+</style>
+</head>
+<body>
+
+<!-- Custom cursor -->
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- ── HEADER ── -->
+<header>
+  <div class="header-inner">
+    <div class="logo">
+      <!-- Robozinho Chibi SVG -->
+      <svg class="chibi" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+        <!-- Antena -->
+        <line x1="40" y1="10" x2="40" y2="20" stroke="#00f5ff" stroke-width="2.5" stroke-linecap="round"/>
+        <circle cx="40" cy="8" r="4" fill="#00f5ff" opacity="0.9">
+          <animate attributeName="opacity" values="0.9;0.3;0.9" dur="2s" repeatCount="indefinite"/>
+        </circle>
+        <!-- Cabeça -->
+        <rect x="18" y="18" width="44" height="36" rx="10" fill="#1e1e1e" stroke="#00f5ff" stroke-width="1.5"/>
+        <!-- Olhos -->
+        <rect x="25" y="27" width="12" height="10" rx="3" fill="#00f5ff" opacity="0.9">
+          <animate attributeName="opacity" values="0.9;0.1;0.9" dur="3s" repeatCount="indefinite"/>
+        </rect>
+        <rect x="43" y="27" width="12" height="10" rx="3" fill="#00f5ff" opacity="0.9">
+          <animate attributeName="opacity" values="0.9;0.1;0.9" dur="3s" repeatCount="indefinite"/>
+        </rect>
+        <!-- Boca -->
+        <rect x="28" y="43" width="24" height="5" rx="2.5" fill="#00c4cc" opacity="0.7"/>
+        <!-- Corpo -->
+        <rect x="24" y="56" width="32" height="16" rx="6" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1.5"/>
+        <!-- Pernas -->
+        <rect x="27" y="72" width="10" height="8" rx="3" fill="#1e1e1e" stroke="#00f5ff" stroke-width="1"/>
+        <rect x="43" y="72" width="10" height="8" rx="3" fill="#1e1e1e" stroke="#00f5ff" stroke-width="1"/>
+      </svg>
+      <div>
+        <div class="logo-text"><span>CID</span></div>
+        <div class="logo-sub">CENTRAL INTELLIGENCE DIGITAL</div>
+      </div>
+    </div>
+
+    <div class="header-badges">
+      <div class="badge badge-online">● ONLINE</div>
+      <div class="badge badge-model">LLAMA 3 70B</div>
+    </div>
+
+    <div class="header-title">
+      50+ FERRAMENTAS<br>
+      <span style="color:var(--cyan);font-size:0.6rem">8 MÓDULOS</span>
+    </div>
+  </div>
+</header>
+
+<!-- ── HERO ── -->
+<div class="hero">
+  <h1>
+    <span class="olá">OLÁ, </span><span class="eu">EU </span><span class="sou">SOU </span><span class="cid">O CID</span>
+  </h1>
+  <div class="hero-sub">// ASSISTENTE DE INTELIGÊNCIA ARTIFICIAL · MULTILÍNGUE · 50+ FERRAMENTAS</div>
+</div>
+
+<!-- ── TABS ── -->
+<div class="tabs-wrapper">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('home')">🏠 Home</button>
+    <button class="tab-btn" onclick="switchTab('chat')">💬 Chat IA</button>
+    <button class="tab-btn" onclick="switchTab('pdf')">📄 PDF</button>
+    <button class="tab-btn" onclick="switchTab('excel')">📊 Excel & Dados</button>
+    <button class="tab-btn" onclick="switchTab('imagem')">🖼️ Imagem</button>
+    <button class="tab-btn" onclick="switchTab('video')">🎬 Vídeo</button>
+    <button class="tab-btn" onclick="switchTab('audio')">🎵 Música & Áudio</button>
+    <button class="tab-btn" onclick="switchTab('util')">🔧 Utilitários</button>
+  </div>
+</div>
+
+<!-- ── MAIN ── -->
+<div class="main">
+
+  <!-- ════ HOME ════ -->
+  <div id="tab-home" class="tab-panel active">
+    <div class="home-grid">
+      <div class="home-card" onclick="switchTab('chat')">
+        <div class="home-card-icon">💬</div>
+        <div class="home-card-count">10</div>
+        <div class="home-card-label">Chat IA</div>
+        <div class="home-card-tools">Geral · Dev · Dados<br>Jurídico · Financeiro<br>Professor · Tradutor<br>Copywriter · Design · Saúde</div>
+      </div>
+      <div class="home-card" onclick="switchTab('pdf')">
+        <div class="home-card-icon">📄</div>
+        <div class="home-card-count">7</div>
+        <div class="home-card-label">PDF</div>
+        <div class="home-card-tools">Juntar · Dividir<br>Comprimir · Marca d'água<br>Rotacionar · PDF→Img<br>Analisar com IA</div>
+      </div>
+      <div class="home-card" onclick="switchTab('excel')">
+        <div class="home-card-icon">📊</div>
+        <div class="home-card-count">6</div>
+        <div class="home-card-label">Excel & Dados</div>
+        <div class="home-card-tools">Analisar planilha<br>Cruzar tabelas<br>Gerar do zero<br>CSV↔Excel · Filtrar</div>
+      </div>
+      <div class="home-card" onclick="switchTab('imagem')">
+        <div class="home-card-icon">🖼️</div>
+        <div class="home-card-count">10</div>
+        <div class="home-card-label">Ima
