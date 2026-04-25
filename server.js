@@ -47,7 +47,7 @@ app.post('/api/chat', async (req, res) => {
     const response = await axios.post(
       'https://api.groq.com/openai/v1/chat/completions',
       {
-        model: 'llama3-70b-8192',
+        model: 'llama-3.3-70b-versatile',
         messages: [
           { role: 'system', content: systemContent },
           ...messages
@@ -66,7 +66,7 @@ app.post('/api/chat', async (req, res) => {
     );
 
     const reply = response.data.choices[0].message.content;
-    res.json({ reply, model: 'llama3-70b-8192' });
+    res.json({ reply, model: 'llama-3.3-70b-versatile' });
   } catch (err) {
     console.error('Chat error:', err.response?.data || err.message);
     res.status(500).json({ error: 'Erro ao conectar com a IA. Verifique sua GROQ_API_KEY.' });
@@ -88,7 +88,7 @@ app.post('/api/chat-image', upload.single('image'), async (req, res) => {
     const response = await axios.post(
       'https://api.groq.com/openai/v1/chat/completions',
       {
-        model: 'llava-v1.5-7b-4096-preview',
+        model: 'llama-3.2-11b-vision-preview',
         messages: [
           {
             role: 'user',
@@ -108,11 +108,11 @@ app.post('/api/chat-image', upload.single('image'), async (req, res) => {
       }
     );
 
-    fs.unlinkSync(imageFile.path);
+    if (req.file && fs.existsSync(req.file.path)) fs.unlinkSync(req.file.path);
     res.json({ reply: response.data.choices[0].message.content });
   } catch (err) {
     console.error('Vision error:', err.response?.data || err.message);
-    if (req.file) fs.unlinkSync(req.file.path).catch(() => {});
+    if (req.file && fs.existsSync(req.file.path)) fs.unlinkSync(req.file.path);
     res.status(500).json({ error: 'Erro na análise de imagem.' });
   }
 });
@@ -149,13 +149,13 @@ app.post('/api/qrcode', async (req, res) => {
 // ── Resumir texto com IA ───────────────────────────────────────────────────
 app.post('/api/summarize', async (req, res) => {
   try {
-    const { text, language = 'auto' } = req.body;
+    const { text } = req.body;
     if (!text) return res.status(400).json({ error: 'Texto obrigatório' });
 
     const response = await axios.post(
       'https://api.groq.com/openai/v1/chat/completions',
       {
-        model: 'llama3-70b-8192',
+        model: 'llama-3.3-70b-versatile',
         messages: [
           {
             role: 'system',
@@ -184,7 +184,7 @@ app.get('/api/status', (req, res) => {
   res.json({
     status: 'online',
     version: '2.0.0',
-    model: 'llama3-70b-8192',
+    model: 'llama-3.3-70b-versatile',
     tools: 50,
     uptime: process.uptime(),
     timestamp: new Date().toISOString()
